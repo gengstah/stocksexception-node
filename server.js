@@ -1,22 +1,3 @@
-/*var express = require('express'),
-app = express();
-var port = 3700;
-
-//app.set('view engine', require('jade'));
-//app.engine('html', require('jade'));
-//app.set('views', __dirname + '/');
-
-//app.use(express.static(__dirname + '/public'));
-
-app.get("/hello", function(req, res){
-//res.status(200).render("index");
-res.send('Hello world');
-});
-
-app.listen(port);
-console.log("Listening on port " + port);*/
-
-// Simplest HTTP server
 var http = require('http');
 var path = require('path');
 
@@ -28,13 +9,15 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
+var qs = require('qs');
+
 router.use(express.static(path.resolve(__dirname, 'public')));
 
 io.on('connection', function (socket) {
     
     socket.on('quote', function (symbol) {
         
-        var payload = JSON.stringify({
+        var payload = qs.stringify({
             start : 0,
             limit : 1,
             query : symbol
@@ -55,6 +38,10 @@ io.on('connection', function (socket) {
                 console.log('BODY: ' + data);
                 socket.emit('quote', data);
             });
+        });
+        
+        request.on('error', function(e) {
+            console.log('problem with request: ' + e.message);
         });
         
         request.write(payload);

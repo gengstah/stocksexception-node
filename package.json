@@ -27,7 +27,8 @@
   "dependencies": {
     "express": "~3.4.4",
     "async": "~0.2.8",
-    "socket.io": "~0.9.14"
+    "socket.io": "~0.9.14",
+    "qs": "~0.6.6"
   },
   "devDependencies": {},
   "bundleDependencies": [],
