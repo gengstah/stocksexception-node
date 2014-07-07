@@ -1,0 +1,37 @@
+{
+  "name": "stocksexception",
+  "version": "1.0.0",
+  "description": "Stocks Exception",
+  "keywords": [
+    "OpenShift",
+    "Node.js",
+    "application",
+    "openshift"
+  ],
+  "author": {
+    "name": "gengstah",
+    "email": "gengstah@geeksexception.com",
+    "url": "http://www.geeksexception.com/"
+  },
+  "homepage": "http://www.geeksexception.com/",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+
+  "dependencies": {
+    "express": "~3.4.4",
+    "async": "~0.2.8",
+    "socket.io": "~0.9.14"
+  },
+  "devDependencies": {},
+  "bundleDependencies": [],
+
+  "private": true,
+  "main": "server-openshift.js"
+}
