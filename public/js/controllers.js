@@ -4,9 +4,17 @@ function StocksController($scope) {
     
     var socket = io.connect();
     
+    socket.on('stockInfo', function (data) {
+        
+        $scope.stockInfo = data;
+        //$scope.securityName = data.securityName;
+        $scope.$apply();
+        
+    });
+    
     socket.on('quote', function (data) {
         
-        $scope.stocks = data;
+        $scope.quote = data;
         $scope.$apply();
         
     });
