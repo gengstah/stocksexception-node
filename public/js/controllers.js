@@ -4,18 +4,17 @@ function StocksController($scope) {
     
     var socket = io.connect();
     
-    socket.on('stockInfo', function (data) {
-        
-        $scope.stockInfo = data;
-        //$scope.securityName = data.securityName;
-        $scope.$apply();
-        
-    });
+    $("#lastTradePriceValue").tooltip({
+		placement : 'auto top'
+	});
     
     socket.on('quote', function (data) {
         
-        $scope.quote = data;
+        $scope.securityName = data.stockInfo.securityName;
+        $scope.quoteDate = new Date();
         $scope.$apply();
+        $("#btnSubmit").button('reset');
+        $("#stockInformation").removeClass("hidden");
         
     });
     
@@ -29,7 +28,6 @@ function StocksController($scope) {
                 $("#btnSubmit").button('reset');
             });*/
         socket.emit('quote', $scope.symbol);
-        $("#btnSubmit").button('reset');
         
     }
     

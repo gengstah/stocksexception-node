@@ -16,16 +16,20 @@ router.use(express.static(path.resolve(__dirname, 'public')));
 io.on('connection', function (socket) {
     
     socket.on('quote', function (symbol) {
-        var stockInfo = retrieveStockInfo(symbol);
-        console.log(stockInfo);
-        socket.emit('stockInfo', stockInfo);
-        
-        //retrieveQuote(stockInfo.listedCompany_companyId, stockInfo.securityId);
+        retrieveStockInfo(symbol, function (stockInfo) {
+            //console.log(stockInfo);
+            //socket.emit('stockInfo', stockInfo);
+            
+            retrieveQuote(stockInfo.listedCompany_companyId, stockInfo.securityId, function (quote) {
+                console.log({ "stockInfo" : stockInfo, "quote" : quote });
+                socket.emit('quote', { "stockInfo" : stockInfo, "quote" : quote });
+            });
+        });
     });
     
 });
 
-function retrieveStockInfo(symbol) {
+function retrieveStockInfo(symbol, fn) {
     var payload = qs.stringify({
         start : 0,
         limit : 1,
@@ -44,7 +48,6 @@ function retrieveStockInfo(symbol) {
     };
 
     var request = http.request(options, function(res) {
-        
         var data = "";
         
         res.setEncoding('utf8');
@@ -55,8 +58,8 @@ function retrieveStockInfo(symbol) {
         res.on('end', function () {
             var dataJson = JSON.parse(data);
             var stockInfo = dataJson.records[0];
-            socket.emit('stockInfo', stockInfo);
-            return stockInfo;
+            
+            fn(stockInfo);
         });
     });
 
@@ -64,7 +67,7 @@ function retrieveStockInfo(symbol) {
     request.end();
 }
 
-function retrieveQuote(listedCompanyId, securityId) {
+function retrieveQuote(listedCompanyId, securityId, fn) {
     var payload = qs.stringify({
         company : listedCompanyId,
         security : securityId
@@ -82,11 +85,18 @@ function retrieveQuote(listedCompanyId, securityId) {
     };
 
     var request = http.request(options, function(res) {
+        var data = "";
+        
         res.setEncoding('utf8');
-        res.on('data', function (data) {
-            console.log('BODY: ' + data);
+        res.on('data', function (chunk) {
+            data += chunk;
+        });
+        
+        res.on('end', function () {
+            var dataJson = JSON.parse(data);
+            var quote = dataJson.records[0];
             
-            socket.emit('quote', data.records[0]);
+            fn(quote);
         });
     });
 
