@@ -13,13 +13,24 @@ var qs = require('qs');
 
 router.use(express.static(path.resolve(__dirname, 'public')));
 
+var sockets = [];
+var clients = [];
+
 io.on('connection', function (socket) {
     
+    sockets.push(socket);
+    clients.push('');
+    
+    socket.on('disconnect', function () {
+        var index = sockets.indexOf(socket);
+        sockets.splice(index, 1);
+        clients.splice(index, 1);
+    });
+    
     socket.on('quote', function (symbol) {
+        var index = sockets.indexOf(socket);
+        clients[index] = symbol;
         retrieveStockInfo(symbol, function (stockInfo) {
-            //console.log(stockInfo);
-            //socket.emit('stockInfo', stockInfo);
-            
             retrieveQuote(stockInfo.listedCompany_companyId, stockInfo.securityId, function (quote) {
                 console.log({ "stockInfo" : stockInfo, "quote" : quote });
                 socket.emit('quote', { "stockInfo" : stockInfo, "quote" : quote });
@@ -28,6 +39,40 @@ io.on('connection', function (socket) {
     });
     
 });
+
+setInterval(updateQuotations, 10000);
+
+function updateQuotations() {
+    
+    console.log("updating all quotations");
+    var caches = [];
+    sockets.forEach(function (socket) {
+        
+        var socketIndex = sockets.indexOf(socket);
+        var symbol = clients[socketIndex];
+        
+        if(symbol) {
+            caches.forEach(function (cache) {
+                if(cache.symbol == symbol) {
+                    var cacheIndex = caches.indexOf(cache);
+                    console.log("Sending data from cache");
+                    socket.emit('quote', { "stockInfo" : caches[cacheIndex].stockInfo, "quote" : caches[cacheIndex].quote });
+                    return;
+                }
+            });
+
+            retrieveStockInfo(symbol, function (stockInfo) {
+                retrieveQuote(stockInfo.listedCompany_companyId, stockInfo.securityId, function (quote) {
+                    console.log({ "stockInfo" : stockInfo, "quote" : quote });
+                    caches.push({ "symbol" : symbol, "stockInfo" : stockInfo , "quote" : quote });
+                    socket.emit('quote', { "stockInfo" : stockInfo, "quote" : quote });
+                });
+            });
+        }
+        
+    });
+    
+}
 
 function retrieveStockInfo(symbol, fn) {
     var payload = qs.stringify({

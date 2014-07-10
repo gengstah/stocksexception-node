@@ -44,11 +44,11 @@
 			<div id="stockInformation" class="hidden">
 				<div class="row">
 					<div id="stockNameInfo" class="col-md-10">
-						<h3>XYZ <span class="text-muted" ng-bind="securityName">Company XYZ</span></h3>
+						<h3><span ng-bind="stocks.stockInfo.symbol">XYZ</span> <span class="text-muted" ng-bind="stocks.stockInfo.securityName">Company XYZ</span></h3>
 						<small ng-bind="quoteDate">As of January 1, 1970 00:00 AM</small>
 					</div>
 					<div class="col-md-2">
-						<h1 id="lastTradePriceValue" class="pull-right" data-toggle="tooltip" title="Last trade price"><span class="label label-success">99.99</span></h1>
+						<h1 id="lastTradePriceValue" class="pull-right" data-toggle="tooltip" title="Last trade price"><span class="label label-success" ng-class="{ 'label label-success' : stocks.quote.headerChangeClose > 0, 'label label-danger' : stocks.quote.headerChangeClose < 0, 'label label-default' : stocks.quote.headerChangeClose == 0 }" ng-bind="stocks.quote.headerLastTradePrice">99.99</span></h1>
 					</div>
 				</div>
 				<div class="col-md-6">
@@ -57,7 +57,7 @@
 							<h4>Change</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="changeValue"><span class="label label-success">9.99</span></h4>
+							<h4 id="changeValue"><span class="label label-success" ng-class="{ 'label label-success' : stocks.quote.headerChangeClose > 0, 'label label-danger' : stocks.quote.headerChangeClose < 0, 'label label-default' : stocks.quote.headerChangeClose == 0 }" ng-bind="stocks.quote.headerChangeClose">9.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -65,7 +65,7 @@
 							<h4>%Change</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="percentChangeValue"><span class="label label-success">9.99%</span></h4>
+							<h4 id="percentChangeValue"><span class="label label-success" ng-class="{ 'label label-success' : stocks.quote.headerChangeClose > 0, 'label label-danger' : stocks.quote.headerChangeClose < 0, 'label label-default' : stocks.quote.headerChangeClose == 0 }" ng-bind-template="{{stocks.quote.headerPercChangeClose}}%">9.99%</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -73,7 +73,7 @@
 							<h4>Value</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="totalValue"><span class="label label-default">999,999,999.99</span></h4>
+							<h4 id="totalValue"><span class="label label-default" ng-bind="stocks.quote.headerTotalValue">999,999,999.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -81,7 +81,7 @@
 							<h4>Volume</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="totalVolume"><span class="label label-default">9,999,999.99</span></h4>
+							<h4 id="totalVolume"><span class="label label-default" ng-bind="stocks.quote.headerTotalVolume">9,999,999.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -89,7 +89,7 @@
 							<h4>52wk</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="fiftytwoweekValue"><span class="label label-default">99.99 ~ 99.99</span></h4>
+							<h4 id="fiftytwoweekValue"><span class="label label-default" ng-bind-template="{{stocks.quote.headerFiftyTwoWeekLow}} ~ {{stocks.quote.headerFiftyTwoWeekHigh}}">99.99 ~ 99.99</span></h4>
 						</div>
 					</div>
 				</div>
@@ -99,7 +99,7 @@
 							<h4>Open</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="priceOpenValue"><span class="label label-default">99.99</span></h4>
+							<h4 id="priceOpenValue"><span class="label label-default" ng-bind="stocks.quote.headerSqOpen">99.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -107,7 +107,7 @@
 							<h4>High</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="priceHighValue"><span class="label label-default">99.99</span></h4>
+							<h4 id="priceHighValue"><span class="label label-default" ng-bind="stocks.quote.headerSqHigh">99.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -115,7 +115,7 @@
 							<h4>Low</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="priceLowValue"><span class="label label-default">99.99</span></h4>
+							<h4 id="priceLowValue"><span class="label label-default" ng-bind="stocks.quote.headerSqLow">99.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -123,7 +123,7 @@
 							<h4>Previous</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="pricePreviousValue"><span class="label label-default">99.99</span></h4>
+							<h4 id="pricePreviousValue"><span class="label label-default" ng-bind="stocks.quote.headerSqPrevious">99.99</span></h4>
 						</div>
 					</div>
 					<div class="row">
@@ -131,7 +131,7 @@
 							<h4>Average</h4>
 						</div>
 						<div class="col-xs-6">
-							<h4 id="averagePriceValue"><span class="label label-default">99.99</span></h4>
+							<h4 id="averagePriceValue"><span class="label label-default" ng-bind="stocks.quote.headerAvgPrice">99.99</span></h4>
 						</div>
 					</div>
 				</div>
